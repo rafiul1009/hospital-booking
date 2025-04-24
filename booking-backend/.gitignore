@@ -45,3 +45,8 @@ docker-compose.override.yml
 # Misc
 .tmp/
 .temp/
+
+# lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
