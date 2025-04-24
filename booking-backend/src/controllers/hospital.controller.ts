@@ -4,6 +4,11 @@ import { AuthRequest } from '../middlewares/auth.middleware';
 
 const prisma = new PrismaClient();
 
+/*
+  @desc   Get all hospitals with their services
+  @route  GET /api/hospitals
+  @access Public
+*/
 export const getAllHospitals = async (_req: Request, res: Response) => {
   try {
     const hospitals = await prisma.hospital.findMany({
@@ -22,6 +27,12 @@ export const getAllHospitals = async (_req: Request, res: Response) => {
   }
 };
 
+/*
+  @desc   Get services for a specific hospital
+  @route  GET /api/hospitals/:hospitalId/services
+  @access Public
+  @params hospitalId - Hospital ID
+*/
 export const getHospitalServices = async (req: Request, res: Response) => {
   try {
     const { hospitalId } = req.params;
@@ -42,6 +53,13 @@ export const getHospitalServices = async (req: Request, res: Response) => {
   }
 };
 
+/*
+  @desc   Create new hospital with services
+  @route  POST /api/hospitals
+  @access Private (Admin only)
+  @body   name - Hospital name
+          services - Array of services [{ name: string, description: string, price: number }]
+*/
 export const createHospital = async (req: AuthRequest, res: Response) => {
   try {
     const { name, services } = req.body;
@@ -92,6 +110,14 @@ export const createHospital = async (req: AuthRequest, res: Response) => {
   }
 };
 
+/*
+  @desc   Update hospital and its services
+  @route  PUT /api/hospitals/:id
+  @access Private (Admin only)
+  @params id - Hospital ID
+  @body   name - Hospital name
+          services - Array of services [{ name: string, description: string, price: number }]
+*/
 export const updateHospital = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
@@ -148,13 +174,22 @@ export const updateHospital = async (req: AuthRequest, res: Response) => {
       };
     });
 
-    res.json(updatedHospital);
+    res.json({
+      message: 'Hospital Updated Successfully',
+      data: updatedHospital
+    });
   } catch (error) {
     console.error('Error updating hospital:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
 
+/*
+  @desc   Delete hospital and all its services
+  @route  DELETE /api/hospitals/:id
+  @access Private (Admin only)
+  @params id - Hospital ID
+*/
 export const deleteHospital = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;

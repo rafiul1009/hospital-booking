@@ -6,6 +6,14 @@ import { JWT_SECRET, NODE_ENV } from '../config';
 
 const prisma = new PrismaClient();
 
+/*
+  @desc   Register new user
+  @route  POST /api/auth/register
+  @access Public
+  @body   name - User's full name
+          email - User's email address
+          password - User's password
+*/
 export const register = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
@@ -59,6 +67,13 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
+/*
+  @desc   Login user
+  @route  POST /api/auth/login
+  @access Public
+  @body   email - User's email address
+          password - User's password
+*/
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
