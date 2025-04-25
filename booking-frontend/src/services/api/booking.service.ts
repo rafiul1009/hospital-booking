@@ -1,26 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   PUBLIC_API_URL,
-  HOSPITALS,
+  BOOKINGS,
 } from '@/constants/api'
 import apiHeader from './api.header'
-import { HospitalFormData } from '@/types'
 
-class HospitalService {
-  static async getAllHospitals(): Promise<any> {
+class BookingService {
+  static async getUserBookings(): Promise<any> {
     try {
       const response = await fetch(
-        PUBLIC_API_URL + HOSPITALS,
+        PUBLIC_API_URL + BOOKINGS + '/my-bookings',
         {
           method: 'GET',
           headers: apiHeader(),
+          credentials: 'include'
         },
       )
 
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.message || 'No hospitals found')
+        throw new Error(data.message || 'No bookings found')
       }
 
       return data
@@ -32,39 +32,18 @@ class HospitalService {
     }
   }
 
-  static async getAllServicesByHospital(id: number): Promise<any> {
+  static async createBooking(bookingData: {
+    serviceId: number;
+    startDate: string;
+    endDate: string;
+  }): Promise<any> {
     try {
       const response = await fetch(
-        PUBLIC_API_URL + HOSPITALS + `/${id}/services`,
-        {
-          method: 'GET',
-          headers: apiHeader(),
-        },
-      )
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.message || 'No hospitals found')
-      }
-
-      return data
-    } catch (error) {
-      if (error instanceof Error) {
-        throw error
-      }
-      throw new Error('An unexpected error occurred')
-    }
-  }
-
-  static async createHospital(formData: HospitalFormData): Promise<any> {
-    try {
-      const response = await fetch(
-        PUBLIC_API_URL + HOSPITALS,
+        PUBLIC_API_URL + BOOKINGS,
         {
           method: 'POST',
           headers: apiHeader(),
-          body: JSON.stringify(formData),
+          body: JSON.stringify(bookingData),
           credentials: 'include'
         },
       )
@@ -72,7 +51,7 @@ class HospitalService {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.message || 'Hospital creation failed')
+        throw new Error(data.message || 'Failed to create booking')
       }
 
       return data
@@ -84,14 +63,19 @@ class HospitalService {
     }
   }
 
-  static async updateHospital(id: number, formData: HospitalFormData): Promise<any> {
+  static async updateBooking(bookingId: number, bookingData: {
+    serviceId?: number;
+    startDate?: string;
+    endDate?: string;
+    status?: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+  }): Promise<any> {
     try {
       const response = await fetch(
-        PUBLIC_API_URL + HOSPITALS + `/${id}`,
+        `${PUBLIC_API_URL}${BOOKINGS}/${bookingId}`,
         {
           method: 'PUT',
           headers: apiHeader(),
-          body: JSON.stringify(formData),
+          body: JSON.stringify(bookingData),
           credentials: 'include'
         },
       )
@@ -99,7 +83,7 @@ class HospitalService {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.message || 'Hospital update failed')
+        throw new Error(data.message || 'Failed to update booking')
       }
 
       return data
@@ -111,10 +95,10 @@ class HospitalService {
     }
   }
 
-  static async deleteHospital(id: number): Promise<any> {
+  static async deleteBooking(bookingId: number): Promise<any> {
     try {
       const response = await fetch(
-        PUBLIC_API_URL + HOSPITALS + `/${id}`,
+        `${PUBLIC_API_URL}${BOOKINGS}/${bookingId}`,
         {
           method: 'DELETE',
           headers: apiHeader(),
@@ -125,7 +109,7 @@ class HospitalService {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.message || 'Hospital deletion failed')
+        throw new Error(data.message || 'Failed to delete booking')
       }
 
       return data
@@ -136,7 +120,6 @@ class HospitalService {
       throw new Error('An unexpected error occurred')
     }
   }
-
 }
 
-export default HospitalService
+export default BookingService

@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import HospitalCard from '@/components/cards/HospitalCard';
 import ErrorMessage from '@/components/message/ErrorMessage';
 import LoadingSkeleton from '@/components/skeleton/LoadingSkeleton';
+import { BookingFormModal } from '@/views/booking/BookingFormModal';
 import { HospitalFormModal } from '@/views/home/HospitalFormModal';
 import { Hospital, UserState } from "@/types";
 import HospitalService from "@/services/api/hospital.service";
@@ -18,6 +19,7 @@ export default function Homepage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isNewHospital, setIsNewHospital] = useState(false);
   const [isAddHospitalOpen, setIsAddHospitalOpen] = useState(false);
+  const [isAddBookingOpen, setIsAddBookingOpen] = useState(false);
   const router = useRouter();
 
   const user = useSelector((state: UserState) => state.auth.user)
@@ -41,10 +43,16 @@ export default function Homepage() {
 
   const handleAppointmentBooking = (hospital: Hospital) => {
     if (user) {
+      setIsAddBookingOpen(true);
       setSelectedHospital(hospital || null);
     } else {
       router.push("/login");
     }
+  }
+
+  const handleAppointmentBookingClose = () => {
+    setIsAddBookingOpen(false);
+    setSelectedHospital(null);
   }
 
   const handleHospitalEdit = (hospital: Hospital) => {
@@ -80,6 +88,9 @@ export default function Homepage() {
 
   useEffect(() => {
     fetchHospitals();
+  }, []);
+
+  useEffect(() => {
     if (isNewHospital) {
       fetchHospitals();
       setIsNewHospital(false);
@@ -123,7 +134,13 @@ export default function Homepage() {
         </div>
       )}
 
-
+      {isAddBookingOpen && selectedHospital && (
+        <BookingFormModal
+          hospital={selectedHospital}
+          isOpen={!!isAddBookingOpen}
+          onClose={() => handleAppointmentBookingClose()}
+        />
+      )}
       {isAddHospitalOpen &&
         <HospitalFormModal
           hospital={selectedHospital}

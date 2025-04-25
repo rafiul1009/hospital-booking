@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import AuthService from "@/services/api/auth.service";
@@ -11,32 +12,48 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
   const fetchUserDetails = async () => {
     try {
-      if(StorageService.get('user')) {
+      if (StorageService.get('user')) {
         AuthService.getUserDetails()
           .then(data => {
-            if (data.data) {            
-              dispatch(setUser(data.data))            
+            if (data.data) {
+              dispatch(setUser(data.data))
             } else {
-              dispatch(logout())
+              handleLogout();
             }
           })
           .catch(error => {
-            console.log(error);          
-            dispatch(logout())
-          })        
+            console.log(error);
+            handleLogout();
+          })
+      } else {
+
       }
     } catch (error) {
       console.log(error);
-      dispatch(logout())
+      handleLogout();
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      AuthService.logout()
+        .then(data => {
+          dispatch(logout())
+        })
+        .catch(error => {
+          console.log(error);
+        })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     fetchUserDetails();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div>{ children }</div>
+    <div>{children}</div>
   )
 }

@@ -46,7 +46,7 @@ export function HospitalFormModal({ hospital, isOpen, onClose, setIsNewHospital 
   };
 
   console.log("hospital", hospital);
-  
+
 
   const handleServiceChange = (index: number, field: keyof Service, value: string) => {
     const newServices = [...services];
@@ -95,7 +95,7 @@ export function HospitalFormModal({ hospital, isOpen, onClose, setIsNewHospital 
       setIsSubmitting(true);
       const apiCall = hospital
         ? HospitalService.updateHospital(hospital.id, formData)
-        : HospitalService.createHospital(formData);      
+        : HospitalService.createHospital(formData);
       apiCall
         .then(data => {
           setIsSubmitting(false)

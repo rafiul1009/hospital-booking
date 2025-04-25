@@ -8,7 +8,7 @@ interface ErrorMessageProps {
 
 export default function ErrorMessage({ message, error, onRetry }: ErrorMessageProps) {
   const errorText = message || error;
-  
+
   return (
     <div className="text-center">
       <p className="text-red-500 mb-4">{errorText}</p>
