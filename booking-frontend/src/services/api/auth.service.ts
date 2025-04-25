@@ -6,7 +6,6 @@ import {
   LOGOUT,
   USER_DETAILS,
 } from '@/constants/api'
-import StorageService from '../app/storage.service'
 import apiHeader from './api.header'
 
 class AuthService {
@@ -48,7 +47,8 @@ class AuthService {
       const response = await fetch(PUBLIC_API_URL + REGISTER, {
         method: 'POST',
         headers: apiHeader(),
-        body: JSON.stringify({ name, email, password })
+        body: JSON.stringify({ name, email, password }),
+        credentials: 'include'
       })
 
       const data = await response.json()
@@ -57,11 +57,13 @@ class AuthService {
         throw new Error(data.message || 'Registration failed')
       }
 
-      if (data.success && data.data?.data) {
-        StorageService.set('user', data.data.data)
+      // Get the cookie from response headers and store it
+      const setCookieHeader = response.headers.get('Set-Cookie')
+      if (setCookieHeader) {
+        document.cookie = setCookieHeader
       }
 
-      return data.data
+      return data
     } catch (error) {
       if (error instanceof Error) {
         throw error
