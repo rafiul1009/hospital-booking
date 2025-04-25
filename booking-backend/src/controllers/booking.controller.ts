@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 /*
   @desc   Create Booking
-  @route  POST /api/bookings
+  @route  POST /bookings
   @access Private
   @body   startDate - Start date
           endDate - End date
@@ -67,7 +67,7 @@ export const createBooking = async (req: AuthRequest, res: Response) => {
 
 /*
   @desc   Get User's Bookings
-  @route  GET /api/bookings/user
+  @route  GET /bookings/user
   @access Private
 */
 export const getUserBookings = async (req: AuthRequest, res: Response) => {
@@ -106,7 +106,7 @@ export const getUserBookings = async (req: AuthRequest, res: Response) => {
 
 /*
   @desc   Update Booking Details
-  @route  PUT /api/bookings/:id
+  @route  PUT /bookings/:id
   @access Private
   @params id - Booking ID
   @body   startDate - New start date
@@ -190,7 +190,7 @@ export const updateBooking = async (req: AuthRequest, res: Response) => {
 
 /*
   @desc   Update Booking Status
-  @route  PATCH /api/bookings/:id/status
+  @route  PATCH /bookings/:id/status
   @access Private
   @params id - Booking ID
   @body   status - New booking status (pending/confirmed/cancelled/completed)
@@ -244,7 +244,7 @@ export const updateBookingStatus = async (req: AuthRequest, res: Response) => {
 
 /*
   @desc   Delete Booking
-  @route  DELETE /api/bookings/:id
+  @route  DELETE /bookings/:id
   @access Private
   @params id - Booking ID
 */

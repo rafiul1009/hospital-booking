@@ -13,7 +13,7 @@ const router = Router();
 router.use(authMiddleware);
 
 router.post('/', createBooking);
-router.get('/me', getUserBookings);
+router.get('/my-bookings', getUserBookings);
 router.put('/:id', updateBooking);
 router.patch('/:id/status', updateBookingStatus);
 router.delete('/:id', deleteBooking);

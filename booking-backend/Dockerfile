@@ -8,14 +8,25 @@ WORKDIR /app
 COPY package*.json ./
 COPY prisma ./prisma/
 
-# Install the dependencies
+# Install build dependencies for bcrypt
+RUN apt-get update && apt-get install -y \
+    python3 \
+    make \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install the dependencies and rebuild bcrypt
 RUN npm install
+RUN npm rebuild bcrypt --build-from-source
 
 # Copy the rest of the application code
 COPY . .
+
+# Build the application
+RUN npm run build
 
 # Expose the port that the app runs on
 EXPOSE 9001
 
 # Define the command to run your application
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]

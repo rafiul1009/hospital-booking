@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 /*
   @desc   Get all hospitals with their services
-  @route  GET /api/hospitals
+  @route  GET /hospitals
   @access Public
 */
 export const getAllHospitals = async (_req: Request, res: Response) => {
@@ -29,7 +29,7 @@ export const getAllHospitals = async (_req: Request, res: Response) => {
 
 /*
   @desc   Get services for a specific hospital
-  @route  GET /api/hospitals/:hospitalId/services
+  @route  GET /hospitals/:hospitalId/services
   @access Public
   @params hospitalId - Hospital ID
 */
@@ -55,7 +55,7 @@ export const getHospitalServices = async (req: Request, res: Response) => {
 
 /*
   @desc   Create new hospital with services
-  @route  POST /api/hospitals
+  @route  POST /hospitals
   @access Private (Admin only)
   @body   name - Hospital name
           services - Array of services [{ name: string, description: string, price: number }]
@@ -112,7 +112,7 @@ export const createHospital = async (req: AuthRequest, res: Response) => {
 
 /*
   @desc   Update hospital and its services
-  @route  PUT /api/hospitals/:id
+  @route  PUT /hospitals/:id
   @access Private (Admin only)
   @params id - Hospital ID
   @body   name - Hospital name
@@ -186,7 +186,7 @@ export const updateHospital = async (req: AuthRequest, res: Response) => {
 
 /*
   @desc   Delete hospital and all its services
-  @route  DELETE /api/hospitals/:id
+  @route  DELETE /hospitals/:id
   @access Private (Admin only)
   @params id - Hospital ID
 */
