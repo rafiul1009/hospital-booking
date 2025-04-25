@@ -51,3 +51,13 @@ export interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
 }
+
+export interface HospitalFormServiceData {
+  name: string;
+  description: string;
+  price: number;
+}
+export interface HospitalFormData {
+  name: string;
+  services: HospitalFormServiceData[];
+}

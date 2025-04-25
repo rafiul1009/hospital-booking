@@ -1,17 +1,27 @@
 "use client"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Hospital } from "@/types";
+import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
+import { Hospital, UserState } from "@/types";
+import { useSelector } from "react-redux";
 
-export default function HospitalCard({ hospital, onBook }: { hospital: Hospital; onBook: (hospital: Hospital) => void }) {
+interface HospitalCardProps {
+  hospital: Hospital;
+  onBook: (hospital: Hospital) => void
+  onEdit: (hospital: Hospital) => void
+  onDelete: (hospital: Hospital) => void
+}
+
+export default function HospitalCard({ hospital, onBook, onEdit, onDelete }: HospitalCardProps) {
+
+  const user = useSelector((state: UserState) => state.auth.user)
+
   return (
     <Card className="hover:shadow-lg transition-shadow">
-      <CardHeader>
-        <CardTitle>{hospital.name}</CardTitle>
-      </CardHeader>
+
       <CardContent>
+        <CardTitle>{hospital.name}</CardTitle>
         <CardDescription>
-          <div className="font-semibold mb-2 border-b border-gray-300 pb-1">Services:</div>
+          <div className="font-semibold mb-2 border-b border-gray-300 pb-1 mt-4">Services:</div>
           <ul>
             {hospital.services.map((service, index) => {
               return <li key={index} className="mb-2 flex justify-between">
@@ -21,12 +31,28 @@ export default function HospitalCard({ hospital, onBook }: { hospital: Hospital;
             })}
           </ul>
         </CardDescription>
+      </CardContent>
+      <CardContent>
         <button
           onClick={() => onBook(hospital)}
-          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md mt-2"
+          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md mt-2 cursor-pointer"
         >
           Book Appointment
         </button>
+        {user && user.type === 'admin' &&
+          <button
+            onClick={() => onEdit(hospital)}
+            className="w-full bg-sky-800 text-white hover:bg-sky-800/90 px-4 py-2 rounded-md mt-2 cursor-pointer"
+          >
+            Edit
+          </button>}
+        {user && user.type === 'admin' &&
+          <button
+            onClick={() => onDelete(hospital)}
+            className="w-full bg-red-800 text-white hover:bg-red-800/90 px-4 py-2 rounded-md mt-2 cursor-pointer"
+          >
+            Delete
+          </button>}
       </CardContent>
     </Card>
   );
