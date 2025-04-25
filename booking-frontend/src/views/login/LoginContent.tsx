@@ -11,7 +11,6 @@ import ErrorMessage from '@/components/message/ErrorMessage';
 import AuthService from '@/services/api/auth.service';
 import { useDispatch } from 'react-redux';
 import { setUser } from '@/store/slices/auth';
-import StorageService from '@/services/app/storage.service';
 
 export default function LoginContent() {
   const [email, setEmail] = useState('');
@@ -36,7 +35,6 @@ export default function LoginContent() {
           setIsSubmitting(false)
 
           if (data.data) {
-            StorageService.set('user', data.data)
             dispatch(setUser(data.data))
             router.push('/')
           } else {
@@ -84,7 +82,7 @@ export default function LoginContent() {
             />
           </div>
 
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
+          <Button type="submit" className="w-full cursor-pointer" disabled={isSubmitting}>
             {isSubmitting ? 'Logging in...' : 'Login'}
           </Button>
 
@@ -95,6 +93,11 @@ export default function LoginContent() {
             </Link>
           </p>
         </form>
+        <p className="text-center text-sm text-muted-foreground mt-4">
+          <Link href="/" className="font-semibold text-primary">
+            Back to Home
+          </Link>
+        </p>
       </CardContent>
     </Card>
   );

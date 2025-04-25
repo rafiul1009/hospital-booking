@@ -15,15 +15,20 @@ export interface Service {
   price: number;
   createdAt?: string;
   updatedAt?: string;
+  hospital?: Hospital;
 }
 
 export interface Booking {
   id: number;
-  userId: string;
-  hospitalId: string;
-  serviceId: string;
-  date: string;
+  userId: number;
+  hospitalId: number;
+  serviceId: number;
+  startDate: string;
+  endDate: string;
+  createdAt?: string;
+  updatedAt?: string;
   status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+  service?: Service;
 }
 
 export interface User {

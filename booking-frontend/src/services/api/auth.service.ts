@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  LOGIN,
   PUBLIC_API_URL,
+  LOGIN,
   REGISTER,
+  LOGOUT,
+  USER_DETAILS,
 } from '@/constants/api'
 import StorageService from '../app/storage.service'
 import apiHeader from './api.header'
@@ -15,7 +17,8 @@ class AuthService {
         {
           method: 'POST',
           headers: apiHeader(),
-          body: JSON.stringify({ email, password })
+          body: JSON.stringify({ email, password }),
+          credentials: 'include'
         },
       )
 
@@ -24,6 +27,13 @@ class AuthService {
       if (!response.ok) {
         throw new Error(data.message || 'Login failed')
       }
+
+      // Get the cookie from response headers and store it
+      const setCookieHeader = response.headers.get('Set-Cookie')
+      if (setCookieHeader) {
+        document.cookie = setCookieHeader
+      }
+
       return data
     } catch (error) {
       if (error instanceof Error) {
@@ -52,6 +62,55 @@ class AuthService {
       }
 
       return data.data
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error
+      }
+      throw new Error('An unexpected error occurred')
+    }
+  }
+
+  static async logout(): Promise<any> {
+    try {
+      const response = await fetch(PUBLIC_API_URL + LOGOUT, {
+        method: 'GET',
+        headers: apiHeader(),
+        credentials: 'include'
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Logout failed')
+      }
+
+      return data
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error
+      }
+      throw new Error('An unexpected error occurred')
+    }
+  }
+
+  static async getUserDetails(): Promise<any> {
+    try {
+      const response = await fetch(
+        PUBLIC_API_URL + USER_DETAILS,
+        {
+          method: 'GET',
+          headers: apiHeader(),
+          credentials: 'include'
+        },
+      )
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || 'No details found')
+      }
+
+      return data
     } catch (error) {
       if (error instanceof Error) {
         throw error

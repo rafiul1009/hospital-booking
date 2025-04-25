@@ -1,3 +1,4 @@
+import StorageService from '@/services/app/storage.service';
 import { AuthState } from '@/types';
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -12,14 +13,16 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
+      StorageService.set('user', action.payload)
       state.user = action.payload
     },
     logout: (state) => {
+      StorageService.clear()
       state.user = null;
       state.isAuthenticated = false;
     },
   },
-  
+
 });
 
 export const { setUser, logout } = authSlice.actions;
