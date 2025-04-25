@@ -112,6 +112,60 @@ npm run dev
 npm run build
 ```
 
+## Docker Deployment
+
+### Prerequisites
+
+- Docker installed on your system
+- Docker Compose (optional, for development environment)
+
+### Docker Configuration
+
+The project includes a multi-stage Dockerfile for optimized production builds:
+
+```dockerfile
+# Build stage
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# Production stage
+FROM node:18-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+EXPOSE 3000
+CMD ["node", "server.js"]
+```
+
+### Build and Run
+
+1. Build the Docker image:
+```bash
+docker build -t hospital-booking-frontend .
+```
+
+2. Run the container:
+```bash
+docker run -p 3000:3000 -e NEXT_PUBLIC_API_URL=your_api_url hospital-booking-frontend
+```
+
+### Environment Variables
+
+Configure these environment variables for production deployment:
+
+- `NODE_ENV`: Set to 'production' for production builds
+- `NEXT_PUBLIC_API_URL`: Public API endpoint for client-side requests
+
+
 ## Best Practices
 
 - **Type Safety**: Strict TypeScript configuration for better code quality
