@@ -3,12 +3,13 @@ import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET, NODE_ENV } from '../config';
+import { AuthRequest } from '../middlewares/auth.middleware';
 
 const prisma = new PrismaClient();
 
 /*
   @desc   Register new user
-  @route  POST /api/auth/register
+  @route  POST /auth/register
   @access Public
   @body   name - User's full name
           email - User's email address
@@ -59,7 +60,7 @@ export const register = async (req: Request, res: Response) => {
 
     res.status(201).json({
       message: 'User created successfully',
-      user: userWithoutPassword
+      data: userWithoutPassword
     });
   } catch (error) {
     console.error('Registration error:', error);
@@ -69,7 +70,7 @@ export const register = async (req: Request, res: Response) => {
 
 /*
   @desc   Login user
-  @route  POST /api/auth/login
+  @route  POST /auth/login
   @access Public
   @body   email - User's email address
           password - User's password
@@ -115,10 +116,55 @@ export const login = async (req: Request, res: Response) => {
 
     res.json({
       message: 'Login successful',
-      user: userWithoutPassword
+      data: userWithoutPassword
     });
   } catch (error) {
     console.error('Login error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+export const logout = (_req: Request, res: Response) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: NODE_ENV === 'production', 
+    sameSite: 'strict',
+    maxAge: 0 
+  });
+
+  return res.status(200).json({ message: 'Logout successfully' });
+};
+
+/*
+  @desc   Get User's Details
+  @route  GET /auth/me
+  @access Private
+*/
+export const getUserDetails = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ message: 'User not found' });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId }
+    });
+
+    if (!user) {
+      return res.status(401).json({ message: 'User not found' });
+    }
+
+    // Remove password from user object
+    const { password: _, ...userWithoutPassword } = user;
+
+    res.json({
+      message: 'User Details',
+      data: userWithoutPassword
+    });
+  } catch (error) {
+    console.error('Error fetching user details:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
