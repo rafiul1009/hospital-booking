@@ -1,20 +1,24 @@
 export interface Hospital {
-  id: string;
+  id: number;
   name: string;
-  location: string;
-  image?: string;
+  services: Service[];
+  userId: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Service {
-  id: string;
-  hospitalId: string;
+  id: number;
+  hospitalId: number;
   name: string;
   description: string;
   price: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Booking {
-  id: string;
+  id: number;
   userId: string;
   hospitalId: string;
   serviceId: string;
@@ -23,10 +27,12 @@ export interface Booking {
 }
 
 export interface User {
-  id: string;
+  id: number;
   email: string;
   name: string;
-  token?: string;
+  type: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface UserState {

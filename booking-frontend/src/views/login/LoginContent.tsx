@@ -1,0 +1,101 @@
+'use client';
+
+import { useState } from 'react';
+import { Card, CardHeader, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import ErrorMessage from '@/components/message/ErrorMessage';
+import AuthService from '@/services/api/auth.service';
+import { useDispatch } from 'react-redux';
+import { setUser } from '@/store/slices/auth';
+import StorageService from '@/services/app/storage.service';
+
+export default function LoginContent() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const router = useRouter();
+  const dispatch = useDispatch()
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email === '' || password === '') {
+      setError('Email and password are required');
+      return;
+    }
+    setIsSubmitting(true);
+    setError('');
+
+    try {
+      AuthService.login(email, password)
+        .then(data => {
+          setIsSubmitting(false)
+
+          if (data.data) {
+            StorageService.set('user', data.data)
+            dispatch(setUser(data.data))
+            router.push('/')
+          } else {
+            setError('Login failed. Please try again.');
+          }
+        })
+        .catch(error => {
+          setIsSubmitting(false)
+          setError(error.message || 'Login failed. Please try again.');
+        })
+    } catch (error) {
+      console.log(error);
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <h1 className="text-2xl font-bold text-center">Login</h1>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {error && <ErrorMessage message={error} />}
+
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
+            {isSubmitting ? 'Logging in...' : 'Login'}
+          </Button>
+
+          <p className="text-center text-sm text-muted-foreground">
+            Don&apos;t have an account?{' '}
+            <Link href="/register" className="text-primary hover:underline">
+              Register
+            </Link>
+          </p>
+        </form>
+      </CardContent>
+    </Card>
+  );
+}
