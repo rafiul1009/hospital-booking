@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hospital Booking Frontend
 
-## Getting Started
+A modern, user-friendly hospital booking system built with Next.js and TypeScript, featuring a robust authentication system and intuitive booking management.
 
-First, run the development server:
+## Technology Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### Core Technologies
+
+- **Next.js 15.3.1**: Chosen for its powerful features including:
+  - Server-side rendering capabilities
+  - Built-in routing system
+  - API routes for backend integration
+  - Enhanced development experience with Turbopack
+
+- **TypeScript**: Implemented for enhanced code reliability and better developer experience through:
+  - Static type checking
+  - Improved code maintainability
+  - Better IDE support and code documentation
+
+### State Management & Form Handling
+
+- **Redux Toolkit**: Selected for centralized state management:
+  - Efficient handling of global application state
+  - Built-in immutability checks
+  - Simplified Redux configuration
+  - Integration with React through react-redux
+
+- **React Hook Form**: Implemented for efficient form handling:
+  - Performance-optimized form validation
+  - Reduced re-renders
+  - Built-in error handling
+  - Integration with Zod for schema validation
+
+### UI Components & Styling
+
+- **shadcn/ui**: Chosen for its modern, accessible components:
+  - Built on Radix UI primitives
+  - Customizable with Tailwind CSS
+  - Consistent design language
+  - Excellent accessibility support
+
+- **Tailwind CSS**: Used for styling:
+  - Utility-first approach
+  - Rapid UI development
+  - Easy customization
+  - Responsive design support
+
+## Project Structure
+
+```
+src/
+├── components/     # Reusable UI components
+│   ├── ui/         # Base UI components
+│   └── message/    # Message components
+├── views/          # Page-specific components
+│   ├── login/      # Login page components
+│   └── register/   # Registration page components
+├── services/       # API services
+│   └── api/        # API integration
+├── store/          # Redux store configuration
+│   └── slices/     # Redux slices
+├── lib/            # Utility functions
+└── hooks/          # Custom React hooks
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Authentication Implementation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The authentication system is implemented using JWT (JSON Web Tokens) with the following features:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Secure token-based authentication
+- Protected routes
+- Automatic token management
+- Redux integration for global auth state
 
-## Learn More
+### Authentication Flow
 
-To learn more about Next.js, take a look at the following resources:
+1. **Registration**:
+   - User submits registration form
+   - Data validation using React Hook Form
+   - API call to create account
+   - Automatic login on successful registration
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Login**:
+   - Email/password validation
+   - JWT token storage
+   - Redux state update
+   - Redirect to protected routes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Form Handling
 
-## Deploy on Vercel
+Forms are implemented using React Hook Form with the following features:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Form validation using Zod schemas
+- Real-time error feedback
+- Controlled inputs with performance optimization
+- Integration with shadcn/ui components
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Development Setup
+
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Start development server:
+```bash
+npm run dev
+```
+
+3. Build for production:
+```bash
+npm run build
+```
+
+## Best Practices
+
+- **Type Safety**: Strict TypeScript configuration for better code quality
+- **Component Architecture**: Modular and reusable component design
+- **State Management**: Centralized Redux store for global state
+- **Form Handling**: Efficient form management with React Hook Form
+- **UI Components**: Consistent design with shadcn/ui
+- **Styling**: Utility-first approach with Tailwind CSS
