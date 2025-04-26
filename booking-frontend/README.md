@@ -125,22 +125,25 @@ The project includes a multi-stage Dockerfile for optimized production builds:
 
 ```dockerfile
 # Build stage
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 WORKDIR /app
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
 
 # Production stage
-FROM node:18-alpine AS runner
+FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
 
-COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
 
 EXPOSE 3000
 CMD ["node", "server.js"]
@@ -150,12 +153,12 @@ CMD ["node", "server.js"]
 
 1. Build the Docker image:
 ```bash
-docker build -t hospital-booking-frontend .
+docker build --no-cache --build-arg NEXT_PUBLIC_API_URL=your_api_url -t hospital-booking-frontend .
 ```
 
 2. Run the container:
 ```bash
-docker run -p 3000:3000 -e NEXT_PUBLIC_API_URL=your_api_url hospital-booking-frontend
+docker run -p 3000:3000 hospital-booking-frontend
 ```
 
 ### Environment Variables
