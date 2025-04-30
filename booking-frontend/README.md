@@ -17,6 +17,21 @@ A modern, user-friendly hospital booking system built with Next.js and TypeScrip
   - Improved code maintainability
   - Better IDE support and code documentation
 
+### Testing Framework
+
+- **Jest**: Primary testing framework configured with:
+  - React Testing Library integration
+  - DOM environment simulation
+  - Comprehensive test coverage reporting
+  - Watch mode for development
+
+- **React Testing Library**: Chosen for component testing:
+  - User-centric testing approach
+  - Real DOM testing
+  - Accessibility-focused assertions
+  - Event simulation capabilities
+
+
 ### State Management & Form Handling
 
 - **Redux Toolkit**: Selected for centralized state management:
@@ -168,6 +183,33 @@ Configure these environment variables for production deployment:
 - `NODE_ENV`: Set to 'production' for production builds
 - `NEXT_PUBLIC_API_URL`: Public API endpoint for client-side requests
 
+### Running Tests
+
+The project includes comprehensive test suites that can be run using the following npm commands:
+
+```bash
+# Run all tests once
+npm test
+
+# Run tests in watch mode (recommended during development)
+npm run test:watch
+
+# Generate test coverage report
+npm run test:coverage
+```
+
+### Test Coverage
+
+After running the coverage command, a detailed report will be generated showing:
+
+- Line coverage: Percentage of code lines executed
+- Function coverage: Percentage of functions called
+- Branch coverage: Percentage of code branches executed
+- Statement coverage: Percentage of code statements executed
+
+The coverage report can be found in the `coverage` directory:
+- HTML report: `coverage/lcov-report/index.html`
+- Console summary: Displayed in terminal after running coverage command
 
 ## Best Practices
 
