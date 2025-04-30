@@ -167,6 +167,59 @@ The project includes Docker configuration for both development and production:
    npm run dev
    ```
 
+## Testing
+
+### Test Structure
+
+```
+src/
+├── __tests__/        # Integration tests
+├── controllers/
+│   └── __tests__/    # Controller unit tests
+└── middlewares/
+    └── __tests__/    # Middleware unit tests
+```
+
+### Running Tests
+
+1. Run all tests:
+   ```bash
+   npm test
+   ```
+
+2. Run tests in watch mode during development:
+   ```bash
+   npm run test:watch
+   ```
+
+3. Run tests with coverage report:
+   ```bash
+   npm run test:coverage
+   ```
+
+### Testing Guidelines
+
+1. **Unit Tests**:
+   - Test individual components in isolation
+   - Mock external dependencies
+   - Focus on edge cases and error handling
+
+2. **Integration Tests**:
+   - Test API endpoints end-to-end
+   - Use test database
+   - Verify request/response cycles
+
+3. **Test Database**:
+   - Separate test database configuration
+   - Automated cleanup after tests
+   - Seeding test data before runs
+
+### Coverage Requirements
+
+- Minimum 80% code coverage
+- 100% coverage for critical paths
+- Regular CI/CD pipeline checks
+
 ## Docker Deployment
 
 1. Configure environment:
