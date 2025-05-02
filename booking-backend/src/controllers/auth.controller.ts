@@ -19,7 +19,7 @@ export const register = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
 
-    if (!name ||!email || !password) {
+    if (!name || !email || !password) {
       return res.status(400).json({ message: 'Name, email and password are required' });
     }
 
@@ -125,14 +125,19 @@ export const login = async (req: Request, res: Response) => {
 };
 
 export const logout = (_req: Request, res: Response) => {
-  res.clearCookie('token', {
-    httpOnly: true,
-    secure: NODE_ENV === 'production', 
-    sameSite: 'strict',
-    maxAge: 0 
-  });
+  try {
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 0
+    });
 
-  return res.status(200).json({ message: 'Logout successfully' });
+    return res.status(200).json({ message: 'Logout successfully' });
+  } catch (error) {
+    console.error('Error in user logout:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 };
 
 /*
